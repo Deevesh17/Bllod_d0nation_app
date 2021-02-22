@@ -22,10 +22,7 @@ const externalstyle = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 75,
-        backgroundColor: '#22C3EC',
-        // shadowOffset: { width: 0, height: 0, },
-        // shadowColor: 'black',
-        // shadowOpacity: 15
+        backgroundColor: '#009387',
         elevation : 60
     },
     ButtonText: {

@@ -11,7 +11,7 @@ import Blood_donor from './Screen/Blood_donor';
 import Emergency_Blood from './Screen/Emergency_Blood';
 import Blood_camp from './Screen/Blood_camp';
 import login from "./Screen/login";
-import sign_up from "./Screen/sign_up";
+import signup from "./Screen/signup";
 
 
 const Stack = createStackNavigator();
@@ -32,7 +32,7 @@ export default class App extends Component {
           <Stack.Screen name="login" component={login} options={{
             headerShown: false
           }} />
-          <Stack.Screen name="Signup" component={sign_up} options={{
+          <Stack.Screen name="Signup" component={signup} options={{
             headerShown: false
           }} />
           <Stack.Screen name="Emergency_Blood" component={Emergency_Blood} options={{

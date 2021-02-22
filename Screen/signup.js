@@ -2,119 +2,129 @@ import React from 'react';
 import {
     View,
     Text,
+    Button,
     TouchableOpacity,
+    Dimensions,
     TextInput,
     Platform,
     StyleSheet,
+    ScrollView,
     StatusBar,
     Alert
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
-import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
 
-const login = ({navigation}) => {
+const signup = ({ navigation }) => {
 
     const [data, setData] = React.useState({
         username: '',
+        email: '',
         password: '',
+        confirm_password: '',
         check_textInputChange: false,
         secureTextEntry: true,
-        isValidUser: true,
-        isValidPassword: true,
+        confirm_secureTextEntry: true,
     });
+
+    const emailchange = (val) => {
+        if (val.length !== 0) {
+            setData({
+                ...data,
+                email: val,
+                check_textInputChange: true
+            });
+        } else {
+            setData({
+                ...data,
+                email: val,
+                check_textInputChange: false
+            });
+        }
+    }
     const textInputChange = (val) => {
-        if (val.trim().length >= 4) {
+        if (val.length !== 0) {
             setData({
                 ...data,
                 username: val,
-                check_textInputChange: true,
-                isValidUser: true
+                email: val,
+                check_textInputChange: true
             });
         } else {
             setData({
                 ...data,
                 username: val,
-                check_textInputChange: false,
-                isValidUser: false
+                email: val,
+                check_textInputChange: false
             });
         }
     }
+
     const handlePasswordChange = (val) => {
-        if (val.trim().length >= 8) {
-            setData({
-                ...data,
-                password: val,
-                isValidPassword: true
-            });
-        } else {
-            setData({
-                ...data,
-                password: val,
-                isValidPassword: false
-            });
-        }
+        setData({
+            ...data,
+            password: val
+        });
     }
+
+    const handleConfirmPasswordChange = (val) => {
+        setData({
+            ...data,
+            confirm_password: val
+        });
+    }
+
     const updateSecureTextEntry = () => {
         setData({
             ...data,
             secureTextEntry: !data.secureTextEntry
         });
     }
-    const handleValidUser = (val) => {
-        if (val.trim().length >= 4) {
-            setData({
-                ...data,
-                isValidUser: true
-            });
-        } else {
-            setData({
-                ...data,
-                isValidUser: false
-            });
-        }
+
+    const updateConfirmSecureTextEntry = () => {
+        setData({
+            ...data,
+            confirm_secureTextEntry: !data.confirm_secureTextEntry
+        });
     }
-    const loginHandle = (userName, password) => {
-        console.log(userName);
-        console.log(password.length);
-        if (password.length == 0 || userName.length == 0) {
-            Alert.alert('Wrong Input!', 'Username or password field cannot be empty.', [
+    const signupfunc = (username, email, password, confirm_password) => {
+        if( username.length ==0 && email.length == 0)
+        {
+            Alert.alert('Wrong Input!', 'Username and email are not to be empty.', [
                 { text: 'Okay' }
             ]);
         }
-        else if(password.length < 8)
+        else if(password != confirm_password) {
+            Alert.alert('Wrong Input!', 'Password and Confirm Password mismatch.', [
+                { text: 'Okay' }
+            ]);
+        }
+        else if(password.length < 8 || confirm_password < 8)
         {
             Alert.alert('Wrong Input!', 'password must be greater than 8.', [
                 { text: 'Okay' }
             ]);
         }
-        else if(userName.length < 4)
+        else
         {
-            Alert.alert('Wrong Input!', 'userName must be greater than 4.', [
-                { text: 'Okay' }
-            ]);
-        }
-        else 
-        {
-            Alert.alert('Message!', 'This feature will be updated soon.', [
-                { text: 'Okay' }
-            ]);
+            navigation.navigate("login");
         }
     }
+
     return (
         <View style={styles.container}>
+            <StatusBar backgroundColor='#009387' barStyle="light-content" />
             <View style={styles.header}>
-                <Text style={styles.text_header}>Welcome!</Text>
+                <Text style={styles.text_header}>Register Now!</Text>
             </View>
             <Animatable.View
                 animation="fadeInUpBig"
-                style={[styles.footer]}
+                style={styles.footer}
             >
-
-                <View style={styles.footer}>
-                    <Text style={styles.text_footer}>UserName</Text>
+                <ScrollView>
+                    <Text style={styles.text_footer}>Username</Text>
                     <View style={styles.action}>
                         <FontAwesome
                             name="user-o"
@@ -122,12 +132,11 @@ const login = ({navigation}) => {
                             size={20}
                         />
                         <TextInput
-                            placeholder="Username"
+                            placeholder="Your Username"
                             style={styles.textInput}
-                            onChangeText={(val) => textInputChange(val)}
-                            onEndEditing={(e) => handleValidUser(e.nativeEvent.text)}
                             autoCapitalize="none"
-
+                            autoCompleteType = "name"
+                            onChangeText={(val) => textInputChange(val)}
                         />
                         {data.check_textInputChange ?
                             <Animatable.View
@@ -141,22 +150,45 @@ const login = ({navigation}) => {
                             </Animatable.View>
                             : null}
                     </View>
-                    {data.isValidUser ? null :
-                        <Animatable.View animation="fadeInLeft" duration={500}>
-                            <Text style={styles.errorMsg}>Username must be 4 characters long.</Text>
-                        </Animatable.View>
-                    }
+                    <Text style={[styles.text_footer, { marginTop: 35 }]}>Email</Text>
+                    <View style={styles.action}>
+                        <FontAwesome
+                            name="envelope"
+                            color="#05375a"
+                            size={20}
+                        />
+                        <TextInput
+                            placeholder="email"
+                            style={styles.textInput}
+                            autoCapitalize="none"
+                            keyboardType = "email-address"
+                            autoCompleteType = "email"
+                            onChangeText={(val) => emailchange(val)}
+                        />
+                        {data.check_textInputChange ?
+                            <Animatable.View
+                                animation="bounceIn"
+                            >
+                                <Feather
+                                    name="check-circle"
+                                    color="green"
+                                    size={20}
+                                />
+                            </Animatable.View>
+                            : null}
+                    </View>
+
                     <Text style={[styles.text_footer, {
                         marginTop: 35
                     }]}>Password</Text>
                     <View style={styles.action}>
-                        <FontAwesome
+                        <Feather
                             name="lock"
                             color="#05375a"
                             size={20}
                         />
                         <TextInput
-                            placeholder="Password"
+                            placeholder="Your Password"
                             secureTextEntry={data.secureTextEntry ? true : false}
                             style={styles.textInput}
                             autoCapitalize="none"
@@ -180,18 +212,53 @@ const login = ({navigation}) => {
                             }
                         </TouchableOpacity>
                     </View>
-                    {data.isValidPassword ? null :
-                        <Animatable.View animation="fadeInLeft" duration={500}>
-                            <Text style={styles.errorMsg}>Password must be 8 characters long.</Text>
-                        </Animatable.View>
-                    }
-                    <TouchableOpacity>
-                        <Text style={{ color: '#009387', marginTop: 15 }}>Forgot password?</Text>
-                    </TouchableOpacity>
+
+                    <Text style={[styles.text_footer, {
+                        marginTop: 35
+                    }]}>Confirm Password</Text>
+                    <View style={styles.action}>
+                        <Feather
+                            name="lock"
+                            color="#05375a"
+                            size={20}
+                        />
+                        <TextInput
+                            placeholder="Confirm Your Password"
+                            secureTextEntry={data.confirm_secureTextEntry ? true : false}
+                            style={styles.textInput}
+                            autoCapitalize="none"
+                            onChangeText={(val) => handleConfirmPasswordChange(val)}
+                        />
+                        <TouchableOpacity
+                            onPress={updateConfirmSecureTextEntry}
+                        >
+                            {data.secureTextEntry ?
+                                <Feather
+                                    name="eye-off"
+                                    color="grey"
+                                    size={20}
+                                />
+                                :
+                                <Feather
+                                    name="eye"
+                                    color="grey"
+                                    size={20}
+                                />
+                            }
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.textPrivate}>
+                        <Text style={styles.color_textPrivate}>
+                            By signing up you agree to our
+                </Text>
+                        <Text style={[styles.color_textPrivate, { fontWeight: 'bold' }]}>{" "}Terms of service</Text>
+                        <Text style={styles.color_textPrivate}>{" "}and</Text>
+                        <Text style={[styles.color_textPrivate, { fontWeight: 'bold' }]}>{" "}Privacy policy</Text>
+                    </View>
                     <View style={styles.button}>
                         <TouchableOpacity
                             style={styles.signIn}
-                            onPress={() => { loginHandle(data.username, data.password) }}
+                            onPress={() => { signupfunc(data.username, data.email, data.password, data.confirm_password) }}
                         >
                             <LinearGradient
                                 colors={['#08d4c4', '#01ab9d']}
@@ -199,12 +266,12 @@ const login = ({navigation}) => {
                             >
                                 <Text style={[styles.textSign, {
                                     color: '#fff'
-                                }]}>Sign In</Text>
+                                }]}>Sign Up</Text>
                             </LinearGradient>
                         </TouchableOpacity>
 
                         <TouchableOpacity
-                            onPress={() => navigation.navigate('Signup')}
+                            onPress={() => navigation.goBack()}
                             style={[styles.signIn, {
                                 borderColor: '#009387',
                                 borderWidth: 1,
@@ -213,17 +280,16 @@ const login = ({navigation}) => {
                         >
                             <Text style={[styles.textSign, {
                                 color: '#009387'
-                            }]}>Sign Up</Text>
+                            }]}>Sign In</Text>
                         </TouchableOpacity>
                     </View>
-
-                </View>
+                </ScrollView>
             </Animatable.View>
-
         </View>
     );
 };
-export default login;
+
+export default signup;
 
 const styles = StyleSheet.create({
     container: {
@@ -237,7 +303,7 @@ const styles = StyleSheet.create({
         paddingBottom: 50
     },
     footer: {
-        flex: 3,
+        flex: Platform.OS === 'ios' ? 3 : 5,
         backgroundColor: '#fff',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
@@ -260,22 +326,11 @@ const styles = StyleSheet.create({
         borderBottomColor: '#f2f2f2',
         paddingBottom: 5
     },
-    actionError: {
-        flexDirection: 'row',
-        marginTop: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#FF0000',
-        paddingBottom: 5
-    },
     textInput: {
         flex: 1,
         marginTop: Platform.OS === 'ios' ? 0 : -12,
         paddingLeft: 10,
         color: '#05375a',
-    },
-    errorMsg: {
-        color: '#FF0000',
-        fontSize: 14,
     },
     button: {
         alignItems: 'center',
@@ -291,5 +346,13 @@ const styles = StyleSheet.create({
     textSign: {
         fontSize: 18,
         fontWeight: 'bold'
+    },
+    textPrivate: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginTop: 20
+    },
+    color_textPrivate: {
+        color: 'grey'
     }
 });
