@@ -16,6 +16,9 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
+import externalstyle from '../Components/externalstyle';
+
+
 
 const signup = ({ navigation }) => {
 
@@ -114,18 +117,18 @@ const signup = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[externalstyle.container]}>
             <StatusBar backgroundColor='#009387' barStyle="light-content" />
-            <View style={styles.header}>
-                <Text style={styles.text_header}>Register Now!</Text>
+            <View style={[externalstyle.header]}>
+                <Text style={[externalstyle.text_header]}>Register Now!</Text>
             </View>
             <Animatable.View
                 animation="fadeInUpBig"
-                style={styles.footer}
+                style={[externalstyle.footer]}
             >
                 <ScrollView>
-                    <Text style={styles.text_footer}>Username</Text>
-                    <View style={styles.action}>
+                    <Text style={[externalstyle.text_footer]}>Username</Text>
+                    <View style={[externalstyle.action]}>
                         <FontAwesome
                             name="user-o"
                             color="#05375a"
@@ -133,7 +136,7 @@ const signup = ({ navigation }) => {
                         />
                         <TextInput
                             placeholder="Your Username"
-                            style={styles.textInput}
+                            style={[externalstyle.textInput]}
                             autoCapitalize="none"
                             autoCompleteType = "name"
                             onChangeText={(val) => textInputChange(val)}
@@ -150,8 +153,8 @@ const signup = ({ navigation }) => {
                             </Animatable.View>
                             : null}
                     </View>
-                    <Text style={[styles.text_footer, { marginTop: 35 }]}>Email</Text>
-                    <View style={styles.action}>
+                    <Text style={[externalstyle.text_footer, { marginTop: 35 }]}>Email</Text>
+                    <View style={[externalstyle.action]}>
                         <FontAwesome
                             name="envelope"
                             color="#05375a"
@@ -159,7 +162,7 @@ const signup = ({ navigation }) => {
                         />
                         <TextInput
                             placeholder="email"
-                            style={styles.textInput}
+                            style={[externalstyle.textInput]}
                             autoCapitalize="none"
                             keyboardType = "email-address"
                             autoCompleteType = "email"
@@ -178,10 +181,10 @@ const signup = ({ navigation }) => {
                             : null}
                     </View>
 
-                    <Text style={[styles.text_footer, {
+                    <Text style={[externalstyle.text_footer, {
                         marginTop: 35
                     }]}>Password</Text>
-                    <View style={styles.action}>
+                    <View style={[externalstyle.action]}>
                         <Feather
                             name="lock"
                             color="#05375a"
@@ -190,7 +193,7 @@ const signup = ({ navigation }) => {
                         <TextInput
                             placeholder="Your Password"
                             secureTextEntry={data.secureTextEntry ? true : false}
-                            style={styles.textInput}
+                            style={[externalstyle.textInput]}
                             autoCapitalize="none"
                             onChangeText={(val) => handlePasswordChange(val)}
                         />
@@ -213,10 +216,10 @@ const signup = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
 
-                    <Text style={[styles.text_footer, {
+                    <Text style={[externalstyle.text_footer, {
                         marginTop: 35
                     }]}>Confirm Password</Text>
-                    <View style={styles.action}>
+                    <View style={[externalstyle.action]}>
                         <Feather
                             name="lock"
                             color="#05375a"
@@ -225,7 +228,7 @@ const signup = ({ navigation }) => {
                         <TextInput
                             placeholder="Confirm Your Password"
                             secureTextEntry={data.confirm_secureTextEntry ? true : false}
-                            style={styles.textInput}
+                            style={[externalstyle.textInput]}
                             autoCapitalize="none"
                             onChangeText={(val) => handleConfirmPasswordChange(val)}
                         />
@@ -247,24 +250,24 @@ const signup = ({ navigation }) => {
                             }
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.textPrivate}>
-                        <Text style={styles.color_textPrivate}>
+                    <View style={[externalstyle.textPrivate]}>
+                        <Text style={[externalstyle.color_textPrivate]}>
                             By signing up you agree to our
                 </Text>
-                        <Text style={[styles.color_textPrivate, { fontWeight: 'bold' }]}>{" "}Terms of service</Text>
-                        <Text style={styles.color_textPrivate}>{" "}and</Text>
-                        <Text style={[styles.color_textPrivate, { fontWeight: 'bold' }]}>{" "}Privacy policy</Text>
+                        <Text style={[externalstyle.color_textPrivate, { fontWeight: 'bold' }]}>{" "}Terms of service</Text>
+                        <Text style={externalstyle.color_textPrivate}>{" "}and</Text>
+                        <Text style={[externalstyle.color_textPrivate, { fontWeight: 'bold' }]}>{" "}Privacy policy</Text>
                     </View>
-                    <View style={styles.button}>
+                    <View style={[externalstyle.button]}>
                         <TouchableOpacity
-                            style={styles.signIn}
-                            onPress={() => { signupfunc(data.username, data.email, data.password, data.confirm_password) }}
+                            style={[externalstyle.signIn]}
+                            onPress={() => {signupfunc(data.username, data.email, data.password, data.confirm_password) }}
                         >
                             <LinearGradient
                                 colors={['#08d4c4', '#01ab9d']}
-                                style={styles.signIn}
+                                style={[externalstyle.signIn]}
                             >
-                                <Text style={[styles.textSign, {
+                                <Text style={[externalstyle.textSign, {
                                     color: '#fff'
                                 }]}>Sign Up</Text>
                             </LinearGradient>
@@ -272,13 +275,13 @@ const signup = ({ navigation }) => {
 
                         <TouchableOpacity
                             onPress={() => navigation.goBack()}
-                            style={[styles.signIn, {
+                            style={[externalstyle.signIn, {
                                 borderColor: '#009387',
                                 borderWidth: 1,
                                 marginTop: 15
                             }]}
                         >
-                            <Text style={[styles.textSign, {
+                            <Text style={[externalstyle.textSign, {
                                 color: '#009387'
                             }]}>Sign In</Text>
                         </TouchableOpacity>
@@ -290,69 +293,3 @@ const signup = ({ navigation }) => {
 };
 
 export default signup;
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#009387'
-    },
-    header: {
-        flex: 1,
-        justifyContent: 'flex-end',
-        paddingHorizontal: 20,
-        paddingBottom: 50
-    },
-    footer: {
-        flex: Platform.OS === 'ios' ? 3 : 5,
-        backgroundColor: '#fff',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        paddingHorizontal: 20,
-        paddingVertical: 30
-    },
-    text_header: {
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 30
-    },
-    text_footer: {
-        color: '#05375a',
-        fontSize: 18
-    },
-    action: {
-        flexDirection: 'row',
-        marginTop: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#f2f2f2',
-        paddingBottom: 5
-    },
-    textInput: {
-        flex: 1,
-        marginTop: Platform.OS === 'ios' ? 0 : -12,
-        paddingLeft: 10,
-        color: '#05375a',
-    },
-    button: {
-        alignItems: 'center',
-        marginTop: 50
-    },
-    signIn: {
-        width: '100%',
-        height: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10
-    },
-    textSign: {
-        fontSize: 18,
-        fontWeight: 'bold'
-    },
-    textPrivate: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        marginTop: 20
-    },
-    color_textPrivate: {
-        color: 'grey'
-    }
-});

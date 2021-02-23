@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import externalstyle from '../Components/externalstyle';
-import Elevations from "react-native-elevation";
 
 
 export default class Home extends Component {
