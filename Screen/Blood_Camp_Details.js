@@ -93,7 +93,7 @@ const Emergency_Blood = ({ navigation }) => {
 
     }
 
-    const bloodfunc = async (username, hospita_details, hospital_landmark, end_date, mobile_number, age, blood_group) => {
+    const bloodcamp = async (username, hospita_details, hospital_landmark, end_date, mobile_number, age, blood_group) => {
         console.log(age);
         console.log(hospital_landmark);
         console.log(hospita_details);
@@ -125,7 +125,7 @@ const Emergency_Blood = ({ navigation }) => {
                             onChangeText={(val) => textInputChange(val)}
                         />
                     </View>
-                    <Text style={[externalstyle.text_footer, { marginTop: 35 }]}>Hospital Details</Text>
+                    <Text style={[externalstyle.text_footer, { marginTop: 35 }]}>Camp Organization</Text>
                     <View style={[externalstyle.action]}>
                         <FontAwesome
                             name="address-card"
@@ -133,13 +133,13 @@ const Emergency_Blood = ({ navigation }) => {
                             size={20}
                         />
                         <TextInput
-                            placeholder=" Hospital Details"
+                            placeholder="Camp Organization"
                             style={[externalstyle.textInput]}
                             autoCapitalize="none"
                             onChangeText={(val) => hospitaldetails(val)}
                         />
                     </View>
-                    <Text style={[externalstyle.text_footer, { marginTop: 35 }]}>Hospital Landmark</Text>
+                    <Text style={[externalstyle.text_footer, { marginTop: 35 }]}>Camp Approval</Text>
                     <View style={[externalstyle.action]}>
                         <FontAwesome
                             name="location-arrow"
@@ -147,10 +147,27 @@ const Emergency_Blood = ({ navigation }) => {
                             size={20}
                         />
                         <TextInput
-                            placeholder=" Hospital Landmark"
+                            placeholder="Camp Approval"
                             style={[externalstyle.textInput]}
                             autoCapitalize="none"
                             onChangeText={(val) => hospitallandmark(val)}
+                        />
+                    </View>
+                    <Text style={[externalstyle.text_footer, {
+                        marginTop: 35
+                    }]}>Camp Venue</Text>
+                    <View style={[externalstyle.action]}>
+                        <FontAwesome
+                            name="hourglass"
+                            color="#05375a"
+                            size={20}
+                        />
+                        <TextInput
+                            placeholder="Camp Venue"
+                            style={[externalstyle.textInput]}
+                            keyboardType="number-pad"
+                            autoCapitalize="none"
+                            onChangeText={(val) => handleage(val)}
                         />
                     </View>
                     <Text style={[externalstyle.text_footer, { marginTop: 35 }]}>State</Text>
@@ -183,7 +200,7 @@ const Emergency_Blood = ({ navigation }) => {
                     </View>
                     <Text style={[externalstyle.text_footer, {
                         marginTop: 35
-                    }]}>Date</Text>
+                    }]}>Camp Conducting Date</Text>
                     <View style={[externalstyle.action]}>
                         <FontAwesome
                             name="calendar-check-o"
@@ -191,7 +208,7 @@ const Emergency_Blood = ({ navigation }) => {
                             size={20}
                         />
                         <TextInput
-                            placeholder="Date"
+                            placeholder="Camp Conducting Date"
                             style={[externalstyle.textInput]}
                             keyboardType="number-pad"
                             autoCapitalize="none"
@@ -200,7 +217,7 @@ const Emergency_Blood = ({ navigation }) => {
                     </View>
                     <Text style={[externalstyle.text_footer, {
                         marginTop: 35
-                    }]}>Time</Text>
+                    }]}>Camp Conducting Time</Text>
                     <View style={[externalstyle.action]}>
                         <FontAwesome
                             name="hourglass"
@@ -208,7 +225,7 @@ const Emergency_Blood = ({ navigation }) => {
                             size={20}
                         />
                         <TextInput
-                            placeholder="Time"
+                            placeholder="Camp Conducting Time"
                             style={[externalstyle.textInput]}
                             keyboardType="number-pad"
                             autoCapitalize="none"
@@ -217,40 +234,7 @@ const Emergency_Blood = ({ navigation }) => {
                     </View>
                     <Text style={[externalstyle.text_footer, {
                         marginTop: 35
-                    }]}>Age</Text>
-                    <View style={[externalstyle.action]}>
-                        <FontAwesome
-                            name="birthday-cake"
-                            color="#05375a"
-                            size={20}
-                        />
-                        <TextInput
-                            placeholder="Age"
-                            style={[externalstyle.textInput]}
-                            keyboardType="numeric"
-                            autoCapitalize="none"
-                            onChangeText={(val) => handleage(val)}
-                        />
-                    </View>
-                    <Text style={[externalstyle.text_footer, {
-                        marginTop: 35
-                    }]}>Blood Group</Text>
-                    <View style={[externalstyle.action]}>
-                        <FontAwesome
-                            name="tint"
-                            color="#05375a"
-                            size={20}
-                        />
-                        <TextInput
-                            placeholder="Blood Group"
-                            style={[externalstyle.textInput]}
-                            autoCapitalize="none"
-                            onChangeText={(val) => handlebloodgroup(val)}
-                        />
-                    </View>
-                    <Text style={[externalstyle.text_footer, {
-                        marginTop: 35
-                    }]}>Mobile Number</Text>
+                    }]}>Organizer Mobile Number</Text>
                     <View style={[externalstyle.action]}>
                         <Feather
                             name="phone"
@@ -258,7 +242,7 @@ const Emergency_Blood = ({ navigation }) => {
                             size={20}
                         />
                         <TextInput
-                            placeholder="Mobile Number"
+                            placeholder="Organizer Mobile Number"
                             style={[externalstyle.textInput]}
                             autoCapitalize="none"
                             onChangeText={(val) => handlemobileno(val)}
@@ -268,7 +252,7 @@ const Emergency_Blood = ({ navigation }) => {
                     <View style={[externalstyle.button]}>
                         <TouchableOpacity
                             style={[externalstyle.signIn]}
-                            onPress={() => { bloodfunc(data.username, data.hospita_details, data.hospital_landmark, data.end_date, data.mobile_number, data.age, data.blood_group) }}
+                            onPress={() => { bloodcamp(data.username, data.hospita_details, data.hospital_landmark, data.end_date, data.mobile_number, data.age, data.blood_group) }}
                         >
                             <LinearGradient
                                 colors={['#ff0038', '#ff0038']}
@@ -276,7 +260,7 @@ const Emergency_Blood = ({ navigation }) => {
                             >
                                 <Text style={[externalstyle.textSign, {
                                     color: '#fff'
-                                }]}>Emergency</Text>
+                                }]}>Create Camp</Text>
                             </LinearGradient>
                         </TouchableOpacity>
                     </View>

@@ -2,23 +2,21 @@ import React from 'react';
 import {
     View,
     Text,
-    Button,
     TouchableOpacity,
-    Dimensions,
     TextInput,
-    Platform,
-    StyleSheet,
     ScrollView,
     StatusBar,
-    Alert
+    Alert,
+    ActivityIndicator
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import externalstyle from '../Components/externalstyle';
+import DatePicker from "react-native-modal-datetime-picker";
 
-
+var cookie
 
 const signup = ({ navigation }) => {
 
@@ -27,10 +25,29 @@ const signup = ({ navigation }) => {
         email: '',
         password: '',
         confirm_password: '',
+        current_date: '',
+        age: '',
+        mobile_number: '',
+        blood_group: '',
         check_textInputChange: false,
         secureTextEntry: true,
         confirm_secureTextEntry: true,
     });
+    const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
+
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
+
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
+
+    const handleConfirm = (date) => {
+        console.log("A date has been picked: ", date.toDateString());
+        data.current_date = date.toDateString()
+        hideDatePicker();
+    };
 
     const emailchange = (val) => {
         if (val.length !== 0) {
@@ -52,14 +69,12 @@ const signup = ({ navigation }) => {
             setData({
                 ...data,
                 username: val,
-                email: val,
                 check_textInputChange: true
             });
         } else {
             setData({
                 ...data,
                 username: val,
-                email: val,
                 check_textInputChange: false
             });
         }
@@ -71,6 +86,24 @@ const signup = ({ navigation }) => {
             password: val
         });
     }
+    const handleage = (val) => {
+        setData({
+            ...data,
+            age: val
+        });
+    }
+    const handlebloodgroup = (val) => {
+        setData({
+            ...data,
+            blood_group: val
+        });
+    }
+    const handlemobileno = (val) => {
+        setData({
+            ...data,
+            mobile_number: val
+        });
+    }
 
     const handleConfirmPasswordChange = (val) => {
         setData({
@@ -79,40 +112,73 @@ const signup = ({ navigation }) => {
         });
     }
 
-    const updateSecureTextEntry = () => {
-        setData({
-            ...data,
-            secureTextEntry: !data.secureTextEntry
-        });
-    }
-
-    const updateConfirmSecureTextEntry = () => {
-        setData({
-            ...data,
-            confirm_secureTextEntry: !data.confirm_secureTextEntry
-        });
-    }
-    const signupfunc = (username, email, password, confirm_password) => {
-        if( username.length ==0 && email.length == 0)
-        {
+    const signupfunc = async (username, email, password, confirm_password,current_date,mobile_number,age,blood_group) => {
+        console.log(age);
+        console.log(current_date);
+        console.log(mobile_number);
+        console.log(blood_group);
+        if (username.length == 0 || email.length == 0) {
             Alert.alert('Wrong Input!', 'Username and email are not to be empty.', [
                 { text: 'Okay' }
             ]);
         }
-        else if(password != confirm_password) {
-            Alert.alert('Wrong Input!', 'Password and Confirm Password mismatch.', [
+        else if (password.length == 0 || confirm_password.length == 0) {
+            Alert.alert('Wrong Input!', 'password and confirm password are not to be empty.', [
                 { text: 'Okay' }
             ]);
         }
-        else if(password.length < 8 || confirm_password < 8)
-        {
-            Alert.alert('Wrong Input!', 'password must be greater than 8.', [
+        else if (password != confirm_password) {
+            Alert.alert('Wrong Input!', 'password and confirm password are mismatched.', [
                 { text: 'Okay' }
             ]);
         }
-        else
-        {
-            navigation.navigate("login");
+        else {
+            try {
+                var myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/json");
+                var raw = JSON.stringify({ "usr": "Administrator", "pwd": "2417" });
+                var requestOptions = {
+                    method: 'POST',
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: 'follow'
+                };
+                var responce = await fetch("http://192.168.43.108:8001/api/method/login", requestOptions).catch(error => console.log('error', error));
+                cookie = responce["headers"]["map"]["set-cookie"].split(";")[0]
+                myHeaders.append("Cookie", cookie);
+                raw = JSON.stringify({ "username": username, "email": email, "password": password,"current_date":current_date,"mobile_number":mobile_number,"age":age,"blood_group":blood_group });
+                var requestOptions = {
+                    method: 'POST',
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: 'follow'
+                };
+                responce = await fetch("http://192.168.43.108:8001/api/method/blood_donation.signup_api.signup", requestOptions).catch(error => console.log('error', error));
+                var resp = await responce.json()
+                try {
+                    if (responce.status = 200) {
+                        try {
+                            console.log(resp["message"]["error"])
+                            Alert.alert('Wrong Input!', resp["message"]["error"], [
+                                { text: 'Okay' }
+                            ]);
+                        } catch (error) {
+                            console.log(resp["message"])
+                        }
+                    }
+                }
+                catch (err) {
+                    Alert.alert('Wrong Input!', 'Network Unreachable.', [
+                        { text: 'Okay' }
+                    ]);
+                }
+
+            }
+            catch (err) {
+                Alert.alert('Wrong Input!', 'Network Unreachable.', [
+                    { text: 'Okay' }
+                ]);
+            }
         }
     }
 
@@ -127,7 +193,7 @@ const signup = ({ navigation }) => {
                 style={[externalstyle.footer]}
             >
                 <ScrollView>
-                    <Text style={[externalstyle.text_footer]}>Username</Text>
+                    <Text style={[externalstyle.text_footer]}>Name</Text>
                     <View style={[externalstyle.action]}>
                         <FontAwesome
                             name="user-o"
@@ -135,23 +201,12 @@ const signup = ({ navigation }) => {
                             size={20}
                         />
                         <TextInput
-                            placeholder="Your Username"
+                            placeholder="Your Name"
                             style={[externalstyle.textInput]}
                             autoCapitalize="none"
-                            autoCompleteType = "name"
+                            autoCompleteType="name"
                             onChangeText={(val) => textInputChange(val)}
                         />
-                        {data.check_textInputChange ?
-                            <Animatable.View
-                                animation="bounceIn"
-                            >
-                                <Feather
-                                    name="check-circle"
-                                    color="green"
-                                    size={20}
-                                />
-                            </Animatable.View>
-                            : null}
                     </View>
                     <Text style={[externalstyle.text_footer, { marginTop: 35 }]}>Email</Text>
                     <View style={[externalstyle.action]}>
@@ -161,26 +216,94 @@ const signup = ({ navigation }) => {
                             size={20}
                         />
                         <TextInput
-                            placeholder="email"
+                            placeholder=" Your Email"
                             style={[externalstyle.textInput]}
                             autoCapitalize="none"
-                            keyboardType = "email-address"
-                            autoCompleteType = "email"
+                            keyboardType="email-address"
+                            autoCompleteType="email"
                             onChangeText={(val) => emailchange(val)}
                         />
-                        {data.check_textInputChange ?
-                            <Animatable.View
-                                animation="bounceIn"
-                            >
-                                <Feather
-                                    name="check-circle"
-                                    color="green"
-                                    size={20}
-                                />
-                            </Animatable.View>
-                            : null}
                     </View>
 
+                    <Text style={[externalstyle.text_footer, {
+                        marginTop: 35
+                    }]}>Date Of Birth</Text>
+                    <View style={[externalstyle.action]}>
+                        <FontAwesome
+                            name="birthday-cake"
+                            color="#05375a"
+                            size={20}
+                        />
+                        <TextInput
+                            placeholder={data.current_date}
+                            style={[externalstyle.textInput, { color: '#000000' }]}
+                            keyboardType="numeric"
+                            autoCapitalize="none"
+                            onChangeText={(val) => handlePasswordChange(val)}
+                        />
+                        <TouchableOpacity style={[externalstyle.calender_icon]} onPress={showDatePicker} >
+                            <FontAwesome
+                                name="calendar"
+                                color="#05375a"
+                                size={20}
+                            />
+                        </TouchableOpacity>
+                        <DatePicker
+                            isVisible={isDatePickerVisible}
+                            mode="date"
+                            onConfirm={handleConfirm}
+                            onCancel={hideDatePicker}
+                        />
+                    </View>
+                    <Text style={[externalstyle.text_footer, {
+                        marginTop: 35
+                    }]}>Age</Text>
+                    <View style={[externalstyle.action]}>
+                        <FontAwesome
+                            name="birthday-cake"
+                            color="#05375a"
+                            size={20}
+                        />
+                        <TextInput
+                            placeholder="Your Age"
+                            style={[externalstyle.textInput]}
+                            keyboardType="numeric"
+                            autoCapitalize="none"
+                            onChangeText={(val) => handleage(val)}
+                        />
+                    </View>
+                    <Text style={[externalstyle.text_footer, {
+                        marginTop: 35
+                    }]}>Blood Group</Text>
+                    <View style={[externalstyle.action]}>
+                        <FontAwesome
+                            name="tint"
+                            color="#05375a"
+                            size={20}
+                        />
+                        <TextInput
+                            placeholder="Your Blood Group"
+                            style={[externalstyle.textInput]}
+                            autoCapitalize="none"
+                            onChangeText={(val) => handlebloodgroup(val)}
+                        />
+                    </View>
+                    <Text style={[externalstyle.text_footer, {
+                        marginTop: 35
+                    }]}>Mobile Number</Text>
+                    <View style={[externalstyle.action]}>
+                        <Feather
+                            name="phone"
+                            color="#05375a"
+                            size={20}
+                        />
+                        <TextInput
+                            placeholder="Your Mobile Number"
+                            style={[externalstyle.textInput]}
+                            autoCapitalize="none"
+                            onChangeText={(val) => handlemobileno(val)}
+                        />
+                    </View>
                     <Text style={[externalstyle.text_footer, {
                         marginTop: 35
                     }]}>Password</Text>
@@ -197,25 +320,10 @@ const signup = ({ navigation }) => {
                             autoCapitalize="none"
                             onChangeText={(val) => handlePasswordChange(val)}
                         />
-                        <TouchableOpacity
-                            onPress={updateSecureTextEntry}
-                        >
-                            {data.secureTextEntry ?
-                                <Feather
-                                    name="eye-off"
-                                    color="grey"
-                                    size={20}
-                                />
-                                :
-                                <Feather
-                                    name="eye"
-                                    color="grey"
-                                    size={20}
-                                />
-                            }
-                        </TouchableOpacity>
                     </View>
-
+                    <View style={[externalstyle.textPrivate]}>
+                        <Text style={[externalstyle.color_textPrivate]}> Include symbols, numbers and capital letters in the password</Text>
+                    </View>
                     <Text style={[externalstyle.text_footer, {
                         marginTop: 35
                     }]}>Confirm Password</Text>
@@ -232,28 +340,10 @@ const signup = ({ navigation }) => {
                             autoCapitalize="none"
                             onChangeText={(val) => handleConfirmPasswordChange(val)}
                         />
-                        <TouchableOpacity
-                            onPress={updateConfirmSecureTextEntry}
-                        >
-                            {data.secureTextEntry ?
-                                <Feather
-                                    name="eye-off"
-                                    color="grey"
-                                    size={20}
-                                />
-                                :
-                                <Feather
-                                    name="eye"
-                                    color="grey"
-                                    size={20}
-                                />
-                            }
-                        </TouchableOpacity>
+
                     </View>
                     <View style={[externalstyle.textPrivate]}>
-                        <Text style={[externalstyle.color_textPrivate]}>
-                            By signing up you agree to our
-                </Text>
+                        <Text style={[externalstyle.color_textPrivate]}>By signing up you agree to our </Text>
                         <Text style={[externalstyle.color_textPrivate, { fontWeight: 'bold' }]}>{" "}Terms of service</Text>
                         <Text style={externalstyle.color_textPrivate}>{" "}and</Text>
                         <Text style={[externalstyle.color_textPrivate, { fontWeight: 'bold' }]}>{" "}Privacy policy</Text>
@@ -261,10 +351,10 @@ const signup = ({ navigation }) => {
                     <View style={[externalstyle.button]}>
                         <TouchableOpacity
                             style={[externalstyle.signIn]}
-                            onPress={() => {signupfunc(data.username, data.email, data.password, data.confirm_password) }}
+                            onPress={() => { signupfunc(data.username, data.email, data.password, data.confirm_password,data.current_date,data.mobile_number,data.age,data.blood_group) }}
                         >
                             <LinearGradient
-                                colors={['#08d4c4', '#01ab9d']}
+                                colors={['#ff0038', '#ff0038']}
                                 style={[externalstyle.signIn]}
                             >
                                 <Text style={[externalstyle.textSign, {
@@ -272,23 +362,24 @@ const signup = ({ navigation }) => {
                                 }]}>Sign Up</Text>
                             </LinearGradient>
                         </TouchableOpacity>
-
                         <TouchableOpacity
                             onPress={() => navigation.goBack()}
                             style={[externalstyle.signIn, {
-                                borderColor: '#009387',
+                                borderColor: '#ff0038',
                                 borderWidth: 1,
                                 marginTop: 15
                             }]}
                         >
+                            <ActivityIndicator />
                             <Text style={[externalstyle.textSign, {
-                                color: '#009387'
+                                color: '#ff0038',
+                                alignItems: 'center'
                             }]}>Sign In</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
             </Animatable.View>
-        </View>
+        </View >
     );
 };
 

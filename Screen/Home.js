@@ -8,14 +8,22 @@ export default class Home extends Component {
     render() {
         const { navigate } = this.props.navigation;
         return (
+            
             <View style={[externalstyle.appbackground]}>
+                <TouchableOpacity
+                    onPress={() => navigate('login')}
+                    style={[externalstyle.CircleShapeView]}>
+                    <View>
+                        <Text style={[externalstyle.ButtonText]}>Doctor </Text>
+                    </View>
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigate('login')}
                     style={[externalstyle.CircleShapeView]}
                 >
                     <Text style={[externalstyle.ButtonText]}>Blood donor</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => navigate('Emergency_Blood')}
+                    onPress={() => navigate('Emergency_List')}
                     style={[externalstyle.CircleShapeView]}
                 >
                     <View>

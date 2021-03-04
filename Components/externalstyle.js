@@ -3,9 +3,16 @@ import Elevations from "react-native-elevation";
 const externalstyle = StyleSheet.create({
     appbackground:
     {
-        flex: 258,
+        flex:300,
         backgroundColor: 'white',
         alignItems: 'center',
+        justifyContent: 'center',
+    },
+    emergencybackground:
+    {
+        flex:300,
+        margin: 10,
+        backgroundColor: 'white',
         justifyContent: 'center',
     },
     splash_text:
@@ -22,8 +29,19 @@ const externalstyle = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 75,
-        backgroundColor: '#009387',
-        elevation : 60
+        backgroundColor: '#ff0038',
+        elevation: 60
+    },
+    CirclepluseeView: {
+        marginVertical: 30,
+        height: 80,
+        width: 80,
+        marginHorizontal: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 40,
+        backgroundColor: '#ff0038',
+        elevation: 60
     },
     ButtonText: {
         textTransform: 'uppercase',
@@ -31,9 +49,14 @@ const externalstyle = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
+    PluseText: {
+        color: '#ffffff',
+        fontSize: 100,
+        fontWeight: 'bold',
+    },
     container: {
         flex: 1,
-        backgroundColor: '#009387'
+        backgroundColor: '#ff0038'
     },
     header: {
         flex: 1,
@@ -84,7 +107,10 @@ const externalstyle = StyleSheet.create({
     },
     button: {
         alignItems: 'center',
-        marginTop: 50
+        marginTop: 30
+    },
+    calender_icon: {
+        alignItems: 'flex-end'
     },
     signIn: {
         width: '100%',
@@ -96,9 +122,15 @@ const externalstyle = StyleSheet.create({
     textSign: {
         fontSize: 18,
         fontWeight: 'bold'
-    },color_textPrivate: {
+    },
+    color_textPrivate: {
         color: 'grey'
-    }
+    },
+    textPrivate: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginTop: 20
+    },
 });
 
 export default externalstyle;

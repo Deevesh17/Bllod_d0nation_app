@@ -4,9 +4,6 @@ import {
     Text,
     TouchableOpacity,
     TextInput,
-    Platform,
-    StyleSheet,
-    StatusBar,
     Alert
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
@@ -16,10 +13,11 @@ import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import externalstyle from '../Components/externalstyle';
 
+var cookie
 const login = ({ navigation }) => {
 
     const [data, setData] = React.useState({
-        userName: '',
+        email: '',
         password: '',
         check_textInputChange: false,
         secureTextEntry: true,
@@ -30,14 +28,14 @@ const login = ({ navigation }) => {
         if (val.trim().length >= 4) {
             setData({
                 ...data,
-                userName: val,
+                email: val,
                 check_textInputChange: true,
                 isValidUser: true
             });
         } else {
             setData({
                 ...data,
-                userName: val,
+                email: val,
                 check_textInputChange: false,
                 isValidUser: false
             });
@@ -77,27 +75,32 @@ const login = ({ navigation }) => {
             });
         }
     }
-    const loginHandle =  async (userName, password) => {
-        console.log(userName);
-        console.log(password);
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        console.log(myHeaders);
+    const loginHandle = async (email, password) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            var raw = JSON.stringify({ "usr": email, "pwd": password });
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            var responce = await fetch("http://192.168.43.108:8001/api/method/login", requestOptions);
+            var resp = await responce.json()
+            cookie = responce["headers"]["map"]["set-cookie"].split(";")[0]
+            if (responce.status = 200) {
+                console.log(resp)
+                navigation.navigate('Blood Doner')
+            }
 
-        var raw = JSON.stringify({ "usr": "Administrator", "pwd": "2417" });
-
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-
-        var responce =  await fetch("http://192.168.43.108:8001/api/method/login", requestOptions).catch(error => console.log('error', error));
-        var resp = await responce.json()
-        var hedcoo = responce["headers"]["map"]["set-cookie"].split(";")[0]
-        console.warn(resp)
-        console.warn(hedcoo)
+        }
+        catch (err) {
+            Alert.alert('Wrong Input!', 'Network Unreachable.', [
+                { text: 'Okay' }
+            ]);
+            console.log(err)
+        }
     }
     return (
         <View style={[externalstyle.container]}>
@@ -110,15 +113,15 @@ const login = ({ navigation }) => {
             >
 
                 <View style={[externalstyle.footer]}>
-                    <Text style={[externalstyle.text_footer]}>UserName</Text>
+                    <Text style={[externalstyle.text_footer]}>Email</Text>
                     <View style={[externalstyle.action]}>
                         <FontAwesome
-                            name="user-o"
+                            name="envelope"
                             color="#05375a"
                             size={20}
                         />
                         <TextInput
-                            placeholder="Username"
+                            placeholder="email"
                             style={[externalstyle.textInput]}
                             onChangeText={(val) => textInputChange(val)}
                             onEndEditing={(e) => handleValidUser(e.nativeEvent.text)}
@@ -136,11 +139,6 @@ const login = ({ navigation }) => {
                             </Animatable.View>
                             : null}
                     </View>
-                    {data.isValidUser ? null :
-                        <Animatable.View animation="fadeInLeft" duration={500}>
-                            <Text style={[externalstyle.errorMsg]}>Username must be 4 characters long.</Text>
-                        </Animatable.View>
-                    }
                     <Text style={[externalstyle.text_footer, {
                         marginTop: 35
                     }]}>Password</Text>
@@ -175,21 +173,16 @@ const login = ({ navigation }) => {
                             }
                         </TouchableOpacity>
                     </View>
-                    {data.isValidPassword ? null :
-                        <Animatable.View animation="fadeInLeft" duration={500}>
-                            <Text style={[externalstyle.errorMsg]}>Password must be 8 characters long.</Text>
-                        </Animatable.View>
-                    }
                     <TouchableOpacity>
-                        <Text style={{color: '#009387', marginTop: 15}}>Forgot password?</Text>
+                        <Text style={{ color: '#009387', marginTop: 15 }}>Forgot password?</Text>
                     </TouchableOpacity>
                     <View style={[externalstyle.button]}>
                         <TouchableOpacity
                             style={[externalstyle.signIn]}
-                            onPress={() => { loginHandle(data.userName, data.password) }}
+                            onPress={() => { loginHandle(data.email, data.password) }}
                         >
                             <LinearGradient
-                                colors={['#08d4c4', '#01ab9d']}
+                                colors={['#ff0038', '#ff0038']}
                                 style={[externalstyle.signIn]}
                             >
                                 <Text style={[externalstyle.textSign, {
@@ -201,13 +194,13 @@ const login = ({ navigation }) => {
                         <TouchableOpacity
                             onPress={() => navigation.navigate('Signup')}
                             style={[externalstyle.signIn, {
-                                borderColor: '#009387',
+                                borderColor: '#ff0038',
                                 borderWidth: 1,
                                 marginTop: 15
                             }]}
                         >
                             <Text style={[externalstyle.textSign, {
-                                color: '#009387'
+                                color: '#ff0038'
                             }]}>Sign Up</Text>
                         </TouchableOpacity>
                     </View>

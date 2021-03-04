@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import externalstyle from '../Components/externalstyle';
 import LottieView from 'lottie-react-native';
-import {
-    StackActions
-  } from '@react-navigation/native';
+
 
 export default class Splash extends Component {
     

@@ -20,11 +20,11 @@ const signup = ({ navigation }) => {
                 style={[externalstyle.emergencybackground]}
             >
                 <View style={[externalstyle.appbackground]}>
-                    <Text style={[externalstyle.splash_text]}> Blood Camp List</Text>
+                    <Text style={[externalstyle.splash_text]}> Emergency Blood List</Text>
                 </View>
                 <View style={[{marginLeft: 250 }]}>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('Blood_Camp_Details')}
+                        onPress={() => navigation.navigate('Emergency_Blood')}
                         style={[externalstyle.CirclepluseeView]}>
                         <View>
                             <Text style={[externalstyle.PluseText]}>+</Text>
