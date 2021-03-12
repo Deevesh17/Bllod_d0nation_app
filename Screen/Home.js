@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity,StatusBar } from 'react-native';
 import externalstyle from '../Components/externalstyle';
 
 
@@ -10,6 +10,8 @@ export default class Home extends Component {
         return (
             
             <View style={[externalstyle.appbackground]}>
+            <StatusBar backgroundColor='#fff' barStyle="light-content" />
+
                 <TouchableOpacity
                     onPress={() => navigate('login')}
                     style={[externalstyle.CircleShapeView]}>

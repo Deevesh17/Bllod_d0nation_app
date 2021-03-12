@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     TextInput,
     ScrollView,
+    StatusBar
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
@@ -104,7 +105,7 @@ const Emergency_Blood = ({ navigation }) => {
 
     return (
         <View style={[externalstyle.emergencybackground]}>
-
+            <StatusBar backgroundColor='#ff0038' barStyle="light-content" />
             <Animatable.View
                 animation="zoomInUp"
                 style={[externalstyle.emergencybackground]}

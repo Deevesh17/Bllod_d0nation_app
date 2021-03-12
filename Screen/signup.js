@@ -112,7 +112,7 @@ const signup = ({ navigation }) => {
         });
     }
 
-    const signupfunc = async (username, email, password, confirm_password,current_date,mobile_number,age,blood_group) => {
+    const signupfunc = async (username, email, password, confirm_password, current_date, mobile_number, age, blood_group) => {
         console.log(age);
         console.log(current_date);
         console.log(mobile_number);
@@ -146,7 +146,7 @@ const signup = ({ navigation }) => {
                 var responce = await fetch("http://192.168.43.108:8001/api/method/login", requestOptions).catch(error => console.log('error', error));
                 cookie = responce["headers"]["map"]["set-cookie"].split(";")[0]
                 myHeaders.append("Cookie", cookie);
-                raw = JSON.stringify({ "username": username, "email": email, "password": password,"current_date":current_date,"mobile_number":mobile_number,"age":age,"blood_group":blood_group });
+                raw = JSON.stringify({ "username": username, "email": email, "password": password, "current_date": current_date, "mobile_number": mobile_number, "age": age, "blood_group": blood_group });
                 var requestOptions = {
                     method: 'POST',
                     headers: myHeaders,
@@ -184,7 +184,7 @@ const signup = ({ navigation }) => {
 
     return (
         <View style={[externalstyle.container]}>
-            <StatusBar backgroundColor='#009387' barStyle="light-content" />
+            <StatusBar backgroundColor='#ff0038' barStyle="light-content" />
             <View style={[externalstyle.header]}>
                 <Text style={[externalstyle.text_header]}>Register Now!</Text>
             </View>
@@ -351,7 +351,7 @@ const signup = ({ navigation }) => {
                     <View style={[externalstyle.button]}>
                         <TouchableOpacity
                             style={[externalstyle.signIn]}
-                            onPress={() => { signupfunc(data.username, data.email, data.password, data.confirm_password,data.current_date,data.mobile_number,data.age,data.blood_group) }}
+                            onPress={() => { signupfunc(data.username, data.email, data.password, data.confirm_password, data.current_date, data.mobile_number, data.age, data.blood_group) }}
                         >
                             <LinearGradient
                                 colors={['#ff0038', '#ff0038']}

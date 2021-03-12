@@ -4,6 +4,7 @@ import {
     Text,
     TouchableOpacity,
     ScrollView,
+    StatusBar
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import externalstyle from '../Components/externalstyle';
@@ -14,6 +15,7 @@ const signup = ({ navigation }) => {
 
     return (
         <View style={[externalstyle.emergencybackground]}>
+            <StatusBar backgroundColor='#ff0038' barStyle="light-content" />
 
             <Animatable.View
                 animation="zoomInUp"

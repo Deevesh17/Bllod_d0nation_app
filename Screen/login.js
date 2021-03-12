@@ -4,7 +4,8 @@ import {
     Text,
     TouchableOpacity,
     TextInput,
-    Alert
+    Alert,
+    StatusBar
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -104,6 +105,8 @@ const login = ({ navigation }) => {
     }
     return (
         <View style={[externalstyle.container]}>
+            <StatusBar backgroundColor='#ff0038' barStyle="light-content" />
+
             <View style={[externalstyle.header]}>
                 <Text style={[externalstyle.text_header]}>Welcome!</Text>
             </View>
