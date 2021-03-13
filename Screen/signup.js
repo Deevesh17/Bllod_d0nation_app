@@ -29,6 +29,7 @@ const signup = ({ navigation }) => {
         age: '',
         mobile_number: '',
         blood_group: '',
+        location: '',
         check_textInputChange: false,
         secureTextEntry: true,
         confirm_secureTextEntry: true,
@@ -44,7 +45,6 @@ const signup = ({ navigation }) => {
     };
 
     const handleConfirm = (date) => {
-        console.log("A date has been picked: ", date.toDateString());
         data.current_date = date.toDateString()
         hideDatePicker();
     };
@@ -79,11 +79,16 @@ const signup = ({ navigation }) => {
             });
         }
     }
-
     const handlePasswordChange = (val) => {
         setData({
             ...data,
             password: val
+        });
+    }
+    const handlelocation = (val) => {
+        setData({
+            ...data,
+            location: val
         });
     }
     const handleage = (val) => {
@@ -112,11 +117,7 @@ const signup = ({ navigation }) => {
         });
     }
 
-    const signupfunc = async (username, email, password, confirm_password, current_date, mobile_number, age, blood_group) => {
-        console.log(age);
-        console.log(current_date);
-        console.log(mobile_number);
-        console.log(blood_group);
+    const signupfunc = async (username, email, password, confirm_password, current_date, mobile_number, age, blood_group, location) => {
         if (username.length == 0 || email.length == 0) {
             Alert.alert('Wrong Input!', 'Username and email are not to be empty.', [
                 { text: 'Okay' }
@@ -143,36 +144,36 @@ const signup = ({ navigation }) => {
                     body: raw,
                     redirect: 'follow'
                 };
-                var responce = await fetch("http://192.168.43.108:8001/api/method/login", requestOptions).catch(error => console.log('error', error));
+                var responce = await fetch("http://192.168.43.108:8008/api/method/login", requestOptions).catch(error => console.log('error', error));
                 cookie = responce["headers"]["map"]["set-cookie"].split(";")[0]
                 myHeaders.append("Cookie", cookie);
-                raw = JSON.stringify({ "username": username, "email": email, "password": password, "current_date": current_date, "mobile_number": mobile_number, "age": age, "blood_group": blood_group });
+                raw = JSON.stringify({ "username": username, "email": email, "password": password, "current_date": current_date, "mobile_number": mobile_number, "age": age, "blood_group": blood_group, "location": location });
                 var requestOptions = {
                     method: 'POST',
                     headers: myHeaders,
                     body: raw,
                     redirect: 'follow'
                 };
-                responce = await fetch("http://192.168.43.108:8001/api/method/blood_donation.signup_api.signup", requestOptions).catch(error => console.log('error', error));
+                responce = await fetch("http://192.168.43.108:8008/api/method/blood_donation.signup_api.signup", requestOptions).catch(error => console.log('error', error));
                 var resp = await responce.json()
-                try {
-                    if (responce.status = 200) {
-                        try {
-                            console.log(resp["message"]["error"])
-                            Alert.alert('Wrong Input!', resp["message"]["error"], [
-                                { text: 'Okay' }
-                            ]);
-                        } catch (error) {
-                            console.log(resp["message"])
-                        }
+                if (responce.status = 200) {
+                    console.log(resp["message"]["msg"])
+                    var greetings = "Congrats!!"
+                    if (resp["message"]["msg"] == "User Already Exist") {
+                        greetings = "Alert!!";
+                        Alert.alert(greetings, resp["message"]["msg"], [
+                            { text: 'Okay' }
+                        ]);
                     }
-                }
-                catch (err) {
-                    Alert.alert('Wrong Input!', 'Network Unreachable.', [
-                        { text: 'Okay' }
-                    ]);
-                }
+                    else{
+                        Alert.alert(greetings, resp["message"]["msg"], [
+                            { text: 'Okay' }
+                        ]);
+                        navigation.navigate('login')
+                    }
 
+
+                }
             }
             catch (err) {
                 Alert.alert('Wrong Input!', 'Network Unreachable.', [
@@ -274,6 +275,23 @@ const signup = ({ navigation }) => {
                     </View>
                     <Text style={[externalstyle.text_footer, {
                         marginTop: 35
+                    }]}>Location</Text>
+                    <View style={[externalstyle.action]}>
+                        <FontAwesome
+                            name="street-view"
+                            color="#05375a"
+                            size={20}
+                        />
+                        <TextInput
+                            placeholder="Location"
+                            style={[externalstyle.textInput]}
+                            keyboardType="default"
+                            autoCapitalize="none"
+                            onChangeText={(val) => handlelocation(val)}
+                        />
+                    </View>
+                    <Text style={[externalstyle.text_footer, {
+                        marginTop: 35
                     }]}>Blood Group</Text>
                     <View style={[externalstyle.action]}>
                         <FontAwesome
@@ -351,7 +369,7 @@ const signup = ({ navigation }) => {
                     <View style={[externalstyle.button]}>
                         <TouchableOpacity
                             style={[externalstyle.signIn]}
-                            onPress={() => { signupfunc(data.username, data.email, data.password, data.confirm_password, data.current_date, data.mobile_number, data.age, data.blood_group) }}
+                            onPress={() => { signupfunc(data.username, data.email, data.password, data.confirm_password, data.current_date, data.mobile_number, data.age, data.blood_group, data.location) }}
                         >
                             <LinearGradient
                                 colors={['#ff0038', '#ff0038']}

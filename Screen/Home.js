@@ -25,7 +25,7 @@ export default class Home extends Component {
                     <Text style={[externalstyle.ButtonText]}>Blood donor</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => navigate('Emergency_List')}
+                    onPress={() => navigate('Emergency_Blood')}
                     style={[externalstyle.CircleShapeView]}
                 >
                     <View>
@@ -33,7 +33,7 @@ export default class Home extends Component {
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => navigate('Blood_Camp')}
+                    onPress={() => navigate('login')}
                     style={[externalstyle.CircleShapeView]}>
                     <View>
                         <Text style={[externalstyle.ButtonText]}>Blood Camp</Text>

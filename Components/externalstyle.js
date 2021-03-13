@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Elevations from "react-native-elevation";
+// import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const externalstyle = StyleSheet.create({
     appbackground:
     {

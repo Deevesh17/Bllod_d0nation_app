@@ -87,12 +87,11 @@ const login = ({ navigation }) => {
                 body: raw,
                 redirect: 'follow'
             };
-            var responce = await fetch("http://192.168.43.108:8001/api/method/login", requestOptions);
+            var responce = await fetch("http://192.168.43.108:8008/api/method/login", requestOptions);
             var resp = await responce.json()
             cookie = responce["headers"]["map"]["set-cookie"].split(";")[0]
             if (responce.status = 200) {
-                console.log(resp)
-                navigation.navigate('Blood Doner')
+                navigation.navigate('Blood_Camp')
             }
 
         }
