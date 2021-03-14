@@ -25,11 +25,11 @@ export default class Home extends Component {
                     <Text style={[externalstyle.ButtonText]}>Blood donor</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => navigate('Emergency_Blood')}
+                    onPress={() => navigate('Emergency')}
                     style={[externalstyle.CircleShapeView]}
                 >
                     <View>
-                        <Text style={[externalstyle.ButtonText]}>Emergency Blood</Text>
+                        <Text style={[externalstyle.ButtonText]}>Emergency</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity

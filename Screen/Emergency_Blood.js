@@ -5,42 +5,60 @@ import {
     TouchableOpacity,
     TextInput,
     ScrollView,
-    StatusBar
+    StatusBar,
+    Alert
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import externalstyle from '../Components/externalstyle';
-
+import DatePicker from "react-native-modal-datetime-picker";
+var cookie;
 
 const Emergency_Blood = ({ navigation }) => {
 
     const [data, setData] = React.useState({
         username: '',
-        hospita_details: '',
+        hospital_details: '',
         hospital_landmark: '',
         end_date: '',
+        state: '',
+        district: '',
+        scode: '',
         age: '',
         mobile_number: '',
         blood_group: '',
+        date_time : '',
         check_textInputChange: false,
         secureTextEntry: true,
         confirm_secureTextEntry: true,
     });
+    const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
 
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
+    const handleConfirm = (date) => {
+        data.end_date = date.toString();
+        data.date_time = date;
+        hideDatePicker();
+    };
 
     const hospitaldetails = (val) => {
         if (val.length !== 0) {
             setData({
                 ...data,
-                hospita_details: val,
+                hospital_details: val,
                 check_textInputChange: true
             });
         } else {
             setData({
                 ...data,
-                hospita_details: val,
+                hospital_details: val,
                 check_textInputChange: false
             });
         }
@@ -61,16 +79,23 @@ const Emergency_Blood = ({ navigation }) => {
         }
     }
 
-    const handledate = (val) => {
-        setData({
-            ...data,
-            end_date: val
-        });
-    }
     const handleage = (val) => {
+        console.log(val);
         setData({
             ...data,
             age: val
+        });
+    }
+    const handlstate = (val) => {
+        setData({
+            ...data,
+            state: val
+        });
+    }
+    const handledis = (val) => {
+        setData({
+            ...data,
+            district: val
         });
     }
     const handlebloodgroup = (val) => {
@@ -79,7 +104,14 @@ const Emergency_Blood = ({ navigation }) => {
             blood_group: val
         });
     }
+    const handlescode = (val) => {
+        setData({
+            ...data,
+            scode: val
+        });
+    }
     const handlemobileno = (val) => {
+        console.log(val);
         setData({
             ...data,
             mobile_number: val
@@ -94,13 +126,39 @@ const Emergency_Blood = ({ navigation }) => {
 
     }
 
-    const bloodfunc = async (username, hospita_details, hospital_landmark, end_date, mobile_number, age, blood_group) => {
-        console.log(age);
-        console.log(hospital_landmark);
-        console.log(hospita_details);
-        console.log(mobile_number);
-        console.log(blood_group);
-        navigation.navigate('Home')
+    const bloodfunc = async (username, hospital_details, hospital_landmark, end_date, mobile_number, age, blood_group, scode, state, district) => {
+        try {
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            var raw = JSON.stringify({ "usr": "Administrator", "pwd": "2417" });
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            var responce = await fetch("http://192.168.43.108:8008/api/method/login", requestOptions).catch(error => console.log('error', error));
+            cookie = responce["headers"]["map"]["set-cookie"].split(";")[0]
+            myHeaders.append("Cookie", cookie);
+            raw = JSON.stringify({ "username": data.username, "hospital_details": data.hospital_details, "hospital_landmark": data.hospital_landmark, "end_date": data.date_time, "mobile_number": data.mobile_number, "age": data.age, "blood_group": data.blood_group, "scode": data.scode, "state": data.state, "district": data.district });
+                var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            responce = await fetch("http://192.168.43.108:8008/api/method/blood_donation.emergency.emergency_create", requestOptions).catch(error => console.log('error', error));
+            var resp = await responce.json()
+            if (responce.status = 200) {
+                navigation.navigate('Emergency')
+            }
+        }
+        catch (err) {
+            Alert.alert('Wrong Input!', 'Network Unreachable.', [
+                { text: 'Okay' }
+            ]);
+            console.log(err)
+        }
     }
 
     return (
@@ -166,7 +224,7 @@ const Emergency_Blood = ({ navigation }) => {
                             placeholder="State"
                             style={[externalstyle.textInput]}
                             autoCapitalize="none"
-                            onChangeText={(val) => hospitallandmark(val)}
+                            onChangeText={(val) => handlstate(val)}
                         />
                     </View>
                     <Text style={[externalstyle.text_footer, { marginTop: 35 }]}>District</Text>
@@ -180,12 +238,12 @@ const Emergency_Blood = ({ navigation }) => {
                             placeholder=" District"
                             style={[externalstyle.textInput]}
                             autoCapitalize="none"
-                            onChangeText={(val) => hospitallandmark(val)}
+                            onChangeText={(val) => handledis(val)}
                         />
                     </View>
                     <Text style={[externalstyle.text_footer, {
                         marginTop: 35
-                    }]}>Date</Text>
+                    }]}>Date Time</Text>
                     <View style={[externalstyle.action]}>
                         <FontAwesome
                             name="calendar-check-o"
@@ -193,28 +251,22 @@ const Emergency_Blood = ({ navigation }) => {
                             size={20}
                         />
                         <TextInput
-                            placeholder="Date"
+                            placeholder={data.end_date}
                             style={[externalstyle.textInput]}
-                            keyboardType="number-pad"
-                            autoCapitalize="none"
-                            onChangeText={(val) => handleage(val)}
+                            editable={false}
                         />
-                    </View>
-                    <Text style={[externalstyle.text_footer, {
-                        marginTop: 35
-                    }]}>Time</Text>
-                    <View style={[externalstyle.action]}>
-                        <FontAwesome
-                            name="hourglass"
-                            color="#05375a"
-                            size={20}
-                        />
-                        <TextInput
-                            placeholder="Time"
-                            style={[externalstyle.textInput]}
-                            keyboardType="number-pad"
-                            autoCapitalize="none"
-                            onChangeText={(val) => handleage(val)}
+                        <TouchableOpacity style={[externalstyle.calender_icon]} onPress={showDatePicker} >
+                            <FontAwesome
+                                name="calendar"
+                                color="#05375a"
+                                size={20}
+                            />
+                        </TouchableOpacity>
+                        <DatePicker
+                            isVisible={isDatePickerVisible}
+                            mode="datetime"
+                            onConfirm={handleConfirm}
+                            onCancel={hideDatePicker}
                         />
                     </View>
                     <Text style={[externalstyle.text_footer, {
@@ -266,11 +318,27 @@ const Emergency_Blood = ({ navigation }) => {
                             onChangeText={(val) => handlemobileno(val)}
                         />
                     </View>
+                    <Text style={[externalstyle.text_footer, {
+                        marginTop: 35
+                    }]}>Secret Code</Text>
+                    <View style={[externalstyle.action]}>
+                        <Feather
+                            name="lock"
+                            color="#05375a"
+                            size={20}
+                        />
+                        <TextInput
+                            placeholder="Secret Code"
+                            style={[externalstyle.textInput]}
+                            autoCapitalize="none"
+                            onChangeText={(val) => handlescode(val)}
+                        />
+                    </View>
 
                     <View style={[externalstyle.button]}>
                         <TouchableOpacity
                             style={[externalstyle.signIn]}
-                            onPress={() => { bloodfunc(data.username, data.hospita_details, data.hospital_landmark, data.end_date, data.mobile_number, data.age, data.blood_group) }}
+                            onPress={() => { bloodfunc(data.username, data.hospital_details, data.hospital_landmark, data.date_time, data.mobile_number, data.age, data.blood_group, data.scode, data.state, data.district) }}
                         >
                             <LinearGradient
                                 colors={['#ff0038', '#ff0038']}

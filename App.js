@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
 import React, { Component } from 'react';
 import {
-  NavigationContainer,Button
+  NavigationContainer, Button
 } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -14,6 +14,8 @@ import login from "./Screen/login";
 import signup from "./Screen/signup";
 import Emergency_List from "./Screen/Emergency List";
 import Blood_Camp_Details from "./Screen/Blood_Camp_Details";
+import Emergency_cancel from "./Screen/Emergency_cancel";
+import Emergency_navigation from "./Screen/Emergency_navigation";
 
 
 const Stack = createStackNavigator();
@@ -24,7 +26,7 @@ export default class App extends Component {
   render() {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName = "Splash">
+        <Stack.Navigator initialRouteName="Splash">
           <Stack.Screen name="Splash" component={Splash} options={{
             headerShown: false
           }} />
@@ -38,7 +40,7 @@ export default class App extends Component {
             headerShown: false
           }} />
           <Stack.Screen name="Emergency_Blood" component={Emergency_Blood} options={{
-            title : "Emergency Blood",
+            title: "Emergency Blood",
             headerStyle: {
               backgroundColor: '#ff0038',
             },
@@ -47,9 +49,28 @@ export default class App extends Component {
               fontWeight: 'bold',
             }
           }} />
-          
+          <Stack.Screen name="Emegency_cancel" component={Emergency_cancel} options={{
+            title: "Emergency Cancel",
+            headerStyle: {
+              backgroundColor: '#ff0038',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            }
+          }} />
+          <Stack.Screen name="Emergency" component={Emergency_navigation} options={{
+            title: "Emergency",
+            headerStyle: {
+              backgroundColor: '#ff0038',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            }
+          }} />
           <Stack.Screen name="Emergency_List" component={Emergency_List} options={{
-            title : "Emergency List",
+            title: "Emergency List",
             headerStyle: {
               backgroundColor: '#ff0038',
             },
@@ -62,7 +83,7 @@ export default class App extends Component {
             headerShown: false
           }} />
           <Stack.Screen name="Blood_Camp" component={Blood_camp} options={{
-            title : "Blood Camp",
+            title: "Blood Camp",
             headerStyle: {
               backgroundColor: '#ff0038',
             },
@@ -72,7 +93,7 @@ export default class App extends Component {
             }
           }} />
           <Stack.Screen name="Blood_Camp_Details" component={Blood_Camp_Details} options={{
-            title : "Blood Camp Details",
+            title: "Blood Camp Details",
             headerStyle: {
               backgroundColor: '#ff0038',
             },

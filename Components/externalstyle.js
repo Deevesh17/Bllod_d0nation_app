@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Elevations from "react-native-elevation";
-// import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const externalstyle = StyleSheet.create({
     appbackground:
     {
@@ -24,12 +24,12 @@ const externalstyle = StyleSheet.create({
     },
     CircleShapeView: {
         marginVertical: 30,
-        height: 150,
-        width: 150,
+        height: 130,
+        width: 130,
         marginHorizontal: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 75,
+        borderRadius: 65,
         backgroundColor: '#ff0038',
         elevation: 60
     },
@@ -47,7 +47,7 @@ const externalstyle = StyleSheet.create({
     ButtonText: {
         textTransform: 'uppercase',
         color: '#ffffff',
-        fontSize: 18,
+        fontSize: hp('2%'),
         fontWeight: 'bold',
     },
     PluseText: {
